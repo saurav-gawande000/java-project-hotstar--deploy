@@ -1,10 +1,10 @@
 # ✅ GitHub → Jenkins → SonarQube → Nexus → S3 (optional) → Ansible → Tomcat1 & Tomcat2  
 
-Project: Java Maven Web App (.war)
+  # Project: Java Maven Web App (.war)
 Target servers: 2 Tomcat servers (load-balanced manually)
 All automation: Jenkins pipeline
 
-🧱 STEP 1: AWS Setup
+# STEP 1: AWS Setup
 
 Launch 5 EC2 Instances:
 
@@ -17,7 +17,7 @@ tomcat2	Amazon Linux 2023	t2.micro	Application Server 2	22, 8080
 
 🔹 Security Groups: Allow inbound from your IP for all necessary ports.
 
-⚙️ STEP 2: Ansible + Jenkins Server Setup
+# ⚙️ STEP 2: Ansible + Jenkins Server Setup
 SSH करा:
 ssh -i mykey.pem ec2-user@<ANSIBLE_JENKINS_PUBLIC_IP>
 sudo -i
@@ -45,7 +45,7 @@ Get initial password:
 
 cat /var/lib/jenkins/secrets/initialAdminPassword
 
-🐳 STEP 3: SonarQube Setup
+# STEP 3: SonarQube Setup
 SSH into Sonar:
 ssh -i mykey.pem ec2-user@<SONAR_IP>
 sudo -i
@@ -65,7 +65,7 @@ su - sonar
 ✅ URL: http://<SONAR_IP>:9000
 Login: admin / admin
 
-📦 STEP 4: Nexus Repository Setup
+# STEP 4: Nexus Repository Setup
 SSH into Nexus:
 ssh -i mykey.pem ubuntu@<NEXUS_IP>
 sudo -i
@@ -107,7 +107,7 @@ cat /opt/sonatype-work/nexus3/admin.password
 
 Create Maven Hosted Repository → Name: hotstarapp
 
-🧩 STEP 5: Tomcat Server Setup (via Ansible)
+# STEP 5: Tomcat Server Setup (via Ansible)
 
 On Ansible-Jenkins server, create inventory:
 
@@ -174,7 +174,7 @@ ansible-playbook /etc/ansible/tomcat.yml -i /etc/ansible/hosts
 http://<TOMCAT1_IP>:8080
 http://<TOMCAT2_IP>:8080
 
-🧠 STEP 6: Jenkins Configuration
+# STEP 6: Jenkins Configuration
 
 Go to Manage Jenkins → Plugins → Install:
 
@@ -202,7 +202,7 @@ nexuscreds	Username/Password	Nexus admin credentials
 sonartoken	Secret text	Sonar token
 linuxcreds	SSH key	For Ansible to deploy
 git-creds	Username/Password or none	GitHub access if private repo
-🧾 STEP 7: Jenkinsfile (Pipeline Script)
+# STEP 7: Jenkinsfile (Pipeline Script)
 
 Put this in your GitHub repo root as Jenkinsfile:
 
@@ -275,7 +275,7 @@ Create /etc/ansible/deploy.yml:
         dest: /opt/tomcat/webapps/
         mode: '0644'
 
-🧩 STEP 8: Run the Pipeline
+# STEP 8: Run the Pipeline
 
 Open Jenkins → New Item → Pipeline → name it HotstarAppPipeline.
 
